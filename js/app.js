@@ -160,7 +160,47 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             const lightboxImg = document.getElementById("lightbox-img");
             lightbox.style.display = "block";
             lightboxImg.src = imgSrc;
+        
+            // แสดง Lightbox Footer
+            const lightboxFooter = lightbox.querySelector(".lightbox-footer");
+            lightboxFooter.style.display = "block";
         }
+        
+        function closeLightbox() {
+            document.getElementById("lightbox").style.display = "none";
+        }
+        //ดาวน์โหลดรูปภาพ
+        async function downloadImage() {
+            const lightboxImg = document.getElementById("lightbox-img");
+            const imgSrc = lightboxImg.src; // URL ของรูปภาพที่กำลังดู
+        
+            try {
+                // ดึงข้อมูลรูปภาพจาก URL
+                const response = await fetch(imgSrc);
+                const blob = await response.blob(); // แปลงข้อมูลเป็น Blob
+        
+                // สร้างลิงก์สำหรับดาวน์โหลด
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob); // สร้าง Blob URL
+                link.download = imgSrc.split("/").pop(); // ดึงชื่อไฟล์จาก URL
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+        
+                // ลบ Blob URL เพื่อเคลียร์หน่วยความจำ
+                URL.revokeObjectURL(link.href);
+            } catch (error) {
+                console.error("Error downloading image:", error);
+                alert("Failed to download image. Please try again.");
+            }
+        }
+        
+        function showPaymentDetails() {
+            alert("Payment details will be shown here."); // แสดงรายละเอียดการชำระเงิน (ตัวอย่าง)
+        }
+
+        
+        
         
         function closeLightbox() {
             document.getElementById("lightbox").style.display = "none";
@@ -187,4 +227,22 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             initLazyLoading(); // เริ่ม lazy loading
             initLightbox(); // เริ่ม Lightbox สำหรับรูปภาพที่โหลดมา
             renderPagination(images.length, page, category);
+        }
+
+        // ดาวน์โหลดรูปภาพและจ่ายเงิน
+        function downloadImage() {
+            const lightboxImg = document.getElementById("lightbox-img");
+            const imgSrc = lightboxImg.src;
+        
+            // สร้างลิงก์สำหรับดาวน์โหลด
+            const link = document.createElement("a");
+            link.href = imgSrc;
+            link.download = "tattoo-design.jpg"; // ตั้งชื่อไฟล์ที่ดาวน์โหลด
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function showPaymentDetails() {
+            alert("Payment details will be shown here."); // แสดงรายละเอียดการชำระเงิน (ตัวอย่าง)
         }

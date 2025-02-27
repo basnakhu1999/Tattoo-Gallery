@@ -333,3 +333,41 @@ body {
     font-size: 40px;
     cursor: pointer;
 }
+
+/*ส่วนที่เพิ่มการแสดงรูปภาพใน Lightbox และปุ่มดาวน์โหลด*/
+.lightbox-footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border-top: 1px solid #444;
+}
+
+.download-btn,
+.payment-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.download-btn {
+    background: #ff6600;
+    color: white;
+}
+
+.download-btn:hover {
+    background: #e65c00;
+}
+
+.payment-btn {
+    background: #333;
+    color: white;
+    border: 1px solid #ff6600;
+}
+
+.payment-btn:hover {
+    background: #444;
+}
