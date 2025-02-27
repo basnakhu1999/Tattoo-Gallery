@@ -1,38 +1,190 @@
-// ลิงก์ Cloud Storage (เช่น Firebase, AWS S3, Google Drive)
-const cloudImages = [
-    { url: "https://source.unsplash.com/400x400/?tattoo,1", category: "ญี่ปุ่น" },
-    { url: "https://source.unsplash.com/400x400/?tattoo,2", category: "มินิมอล" },
-    { url: "https://source.unsplash.com/400x400/?tattoo,3", category: "เรโทร" },
-    { url: "https://source.unsplash.com/400x400/?tattoo,4", category: "ดอกไม้" },
-    { url: "https://source.unsplash.com/400x400/?tattoo,5", category: "สัตว์" },
-];
+const S3_BUCKET = "tattoo-gallery11";
+const REGION = "ap-southeast-2"; // เปลี่ยนเป็น Region ของคุณ
+const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
 
-const gallery = document.getElementById("imageGallery");
+        // ฟังก์ชันดึงรูปภาพจาก S3
+        async function getImagesFromS3(category) {
+            try {
+                // สร้าง URL เพื่อดึงรายการไฟล์ในโฟลเดอร์
+                const response = await fetch(`${S3_URL}?prefix=${category}/`);
+                const text = await response.text();
 
-// ฟังก์ชันโหลดภาพเริ่มต้น
-function loadImages() {
-    gallery.innerHTML = "";
-    cloudImages.forEach((img) => {
-        let imgElement = document.createElement("img");
-        imgElement.src = img.url;
-        imgElement.alt = img.category;
-        imgElement.classList.add("gallery-item");
-        gallery.appendChild(imgElement);
-    });
-}
+                // แปลง XML Response เป็นรายการไฟล์
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "text/xml");
+                const files = Array.from(xml.getElementsByTagName("Key"))
+                    .map(node => node.textContent)
+                    .filter(key => key.endsWith(".jpg") || key.endsWith(".png")); // กรองเฉพาะไฟล์รูปภาพ
 
-// ฟังก์ชันกรองภาพตามหมวดหมู่
-function filterCategory(category) {
-    gallery.innerHTML = "";
-    cloudImages
-        .filter((img) => img.category === category)
-        .forEach((img) => {
-            let imgElement = document.createElement("img");
-            imgElement.src = img.url;
-            imgElement.alt = img.category;
-            gallery.appendChild(imgElement);
+                return files.map(file => `${S3_URL}${file}`);
+            } catch (error) {
+                console.error("Error fetching images:", error);
+                return [];
+            }
+        }
+
+        // ฟังก์ชันแสดงรูปภาพ
+        async function loadImages(category) {
+            const gallery = document.getElementById("imageGallery");
+            gallery.innerHTML = ""; // เคลียร์รูปเดิม
+        
+            const images = await getImagesFromS3(category);
+            images.forEach(imgUrl => {
+                const imgElement = document.createElement("img");
+                imgElement.dataset.src = imgUrl; // ใช้ data-src แทน src
+                imgElement.alt = category + " Tattoo";
+                imgElement.classList.add("lazy-load"); // เพิ่ม class lazy-load
+                gallery.appendChild(imgElement);
+            });
+        
+            // เริ่ม lazy loading
+            initLazyLoading();
+        }
+
+        // โหลดรูปภาพแนะนำทันทีเมื่อหน้าเว็บโหลดเสร็จ
+        document.addEventListener("DOMContentLoaded", () => {
+            loadImages("suggestion"); // แสดงรูปภาพแนะนำ
         });
-}
 
-// โหลดภาพเริ่มต้น
-window.onload = loadImages;
+
+        function initLazyLoading() {
+            const lazyImages = document.querySelectorAll("img.lazy-load");
+        
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src; // โหลดรูปภาพจาก AWS S3
+                        img.classList.remove("lazy-load"); // ลบ class lazy-load
+                        observer.unobserve(img); // หยุดสังเกต element นี้
+                    }
+                });
+            });
+        
+            lazyImages.forEach(img => {
+                observer.observe(img); // เริ่มสังเกตทุกรูปภาพ
+            });
+        }
+
+        //////Intersection Observer API เพื่อโหลดรูปภาพเมื่อ element ปรากฏใน viewport:
+        document.addEventListener("DOMContentLoaded", () => {
+            const lazyImages = document.querySelectorAll("img.lazy-load");
+        
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { // ถ้า element ปรากฏใน viewport
+                        const img = entry.target;
+                        img.src = img.dataset.src; // โหลดรูปภาพ
+                        img.classList.remove("lazy-load"); // ลบ class lazy-load
+                        observer.unobserve(img); // หยุดสังเกต element นี้
+                    }
+                });
+            });
+        
+            lazyImages.forEach(img => {
+                observer.observe(img); // เริ่มสังเกตทุกรูปภาพ
+            });
+        });
+
+        ////100รูปต่อหน้าเว็บ
+        let currentPage = 1; // หน้าปัจจุบัน
+        const itemsPerPage = 100; // จำนวนรูปภาพต่อหน้า
+
+        ////แสดงรูปภาพและปุ่ม Pagination
+        async function loadImages(category, page = 1) {
+            const gallery = document.getElementById("imageGallery");
+            gallery.innerHTML = ""; // เคลียร์รูปเดิม
+        
+            const images = await getImagesFromS3(category);
+            const startIndex = (page - 1) * itemsPerPage; // คำนวณ index เริ่มต้น
+            const endIndex = startIndex + itemsPerPage; // คำนวณ index สิ้นสุด
+            const imagesToShow = images.slice(startIndex, endIndex); // ดึงรูปภาพเฉพาะส่วนที่ต้องการ
+        
+            imagesToShow.forEach(imgUrl => {
+                const imgElement = document.createElement("img");
+                imgElement.dataset.src = imgUrl;
+                imgElement.alt = category + " Tattoo";
+                imgElement.classList.add("lazy-load");
+                gallery.appendChild(imgElement);
+            });
+        
+            initLazyLoading(); // เริ่ม lazy loading
+            renderPagination(images.length, page, category); // แสดงปุ่ม Pagination
+        }
+
+        ////แสดงปุ่ม Pagination ไปหน้า ถอยหลัง
+        function renderPagination(totalItems, currentPage, category) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage); // คำนวณจำนวนหน้าทั้งหมด
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = ""; // เคลียร์ Pagination เดิม
+        
+            // ปุ่ม "ก่อนหน้า"
+            if (currentPage > 1) {
+                const prevButton = document.createElement("button");
+                prevButton.innerText = "ก่อนหน้า";
+                prevButton.addEventListener("click", () => loadImages(category, currentPage - 1));
+                paginationContainer.appendChild(prevButton);
+            }
+        
+            // ปุ่มเลขหน้า
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.innerText = i;
+                if (i === currentPage) pageButton.disabled = true; // ปุ่มหน้าปัจจุบันไม่สามารถคลิกได้
+                pageButton.addEventListener("click", () => loadImages(category, i));
+                paginationContainer.appendChild(pageButton);
+            }
+        
+            // ปุ่ม "ถัดไป"
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement("button");
+                nextButton.innerText = "ถัดไป";
+                nextButton.addEventListener("click", () => loadImages(category, currentPage + 1));
+                paginationContainer.appendChild(nextButton);
+            }
+        }
+
+        //ขยายรูปภาพใหญ่ขึ้น
+        function initLightbox() {
+            const images = document.querySelectorAll("#imageGallery img");
+        
+            images.forEach(img => {
+                img.addEventListener("click", () => {
+                    openLightbox(img.src);
+                });
+            });
+        }
+        //เปิด Lightbox
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            lightbox.style.display = "block";
+            lightboxImg.src = imgSrc;
+        }
+        
+        function closeLightbox() {
+            document.getElementById("lightbox").style.display = "none";
+        }
+        
+        // เรียกใช้ initLightbox หลังจากโหลดรูปภาพเสร็จ
+        async function loadImages(category, page = 1) {
+            const gallery = document.getElementById("imageGallery");
+            gallery.innerHTML = ""; // เคลียร์รูปเดิม
+        
+            const images = await getImagesFromS3(category);
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const imagesToShow = images.slice(startIndex, endIndex);
+        
+            imagesToShow.forEach(imgUrl => {
+                const imgElement = document.createElement("img");
+                imgElement.dataset.src = imgUrl;
+                imgElement.alt = category + " Tattoo";
+                imgElement.classList.add("lazy-load");
+                gallery.appendChild(imgElement);
+            });
+        
+            initLazyLoading(); // เริ่ม lazy loading
+            initLightbox(); // เริ่ม Lightbox สำหรับรูปภาพที่โหลดมา
+            renderPagination(images.length, page, category);
+        }
