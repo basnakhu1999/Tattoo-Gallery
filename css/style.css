@@ -20,14 +20,14 @@ body {
     z-index: 1000;
 }
 
-.navbar h1 {
+.navbar-brand h1 {
     font-size: 1.8rem;
     font-weight: 700;
     color: #222;
     margin: 0;
 }
 
-.navbar input {
+.navbar-search input {
     padding: 10px;
     width: 250px;
     border-radius: 8px;
@@ -36,12 +36,12 @@ body {
     transition: 0.3s;
 }
 
-.navbar input:focus {
+.navbar-search input:focus {
     outline: none;
     border-color: #555;
 }
 
-.navbar button {
+.navbar-actions .btn-signin {
     padding: 10px 15px;
     background: #000;
     color: white;
@@ -51,7 +51,7 @@ body {
     transition: 0.3s;
 }
 
-.navbar button:hover {
+.navbar-actions .btn-signin:hover {
     background: #444;
 }
 
@@ -88,12 +88,29 @@ body {
 .hero p {
     font-size: 1.2rem;
     opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.hero .btn-explore {
+    padding: 12px 24px;
+    background: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero .btn-explore:hover {
+    background: #e65c00;
 }
 
 /* Categories */
 .categories {
     text-align: center;
     padding: 30px 15px;
+    background: #f8f9fa;
 }
 
 .categories h2 {
@@ -109,7 +126,7 @@ body {
     gap: 10px;
 }
 
-.categories button {
+.categories .btn-category {
     padding: 12px 18px;
     font-size: 1rem;
     border: none;
@@ -120,7 +137,7 @@ body {
     transition: 0.3s;
 }
 
-.categories button:hover {
+.categories .btn-category:hover {
     background: #ff6600;
 }
 
@@ -128,6 +145,7 @@ body {
 .gallery {
     text-align: center;
     padding: 40px 15px;
+    background: white;
 }
 
 .gallery h2 {

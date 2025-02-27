@@ -22,6 +22,7 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
                 return [];
             }
         }
+        document.getElementById("searchBox").addEventListener("keyup", searchTattoos);
 
         // ฟังก์ชันแสดงรูปภาพ
         async function loadImages(category) {
@@ -40,6 +41,35 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             // เริ่ม lazy loading
             initLazyLoading();
         }
+
+        // ฟังก์ชันค้นหารูปภาพ
+        async function searchTattoos() {
+            const searchTerm = document.getElementById("searchBox").value.toLowerCase(); // รับคำค้นหา
+            const gallery = document.getElementById("imageGallery");
+            gallery.innerHTML = ""; // เคลียร์รูปเดิม
+        
+            // ดึงรูปภาพทั้งหมดจาก S3
+            const images = await getImagesFromS3(""); // ไม่ระบุโฟลเดอร์ (ดึงทั้งหมด)
+        
+            // กรองรูปภาพที่ตรงกับคำค้นหา
+            const filteredImages = images.filter(imgUrl => {
+                const fileName = imgUrl.split("/").pop().toLowerCase(); // ดึงชื่อไฟล์
+                return fileName.includes(searchTerm); // ตรวจสอบว่าชื่อไฟล์มีคำค้นหาหรือไม่
+            });
+        
+            // แสดงผลการค้นหา
+            filteredImages.forEach(imgUrl => {
+                const imgElement = document.createElement("img");
+                imgElement.src = imgUrl;
+                imgElement.alt = "Tattoo";
+                imgElement.classList.add("lazy-load");
+                gallery.appendChild(imgElement);
+            });
+        }
+
+
+
+
 
         // โหลดรูปภาพแนะนำทันทีเมื่อหน้าเว็บโหลดเสร็จ
         document.addEventListener("DOMContentLoaded", () => {

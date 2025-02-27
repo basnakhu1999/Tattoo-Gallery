@@ -10,9 +10,15 @@
 
     <!-- Navbar -->
     <nav class="navbar">
-        <h1>TattooGallery</h1>
-        <input type="text" id="searchBox" placeholder="Search for tattoos...">
-        <button>Sign In</button>
+        <div class="navbar-brand">
+            <h1>TattooGallery</h1>
+        </div>
+        <div class="navbar-search">
+            <input type="text" id="searchBox" placeholder="Search for tattoos..." onkeyup="searchTattoos()">
+        </div>
+        <div class="navbar-actions">
+            <button class="btn-signin">Sign In</button>
+        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -20,6 +26,7 @@
         <div class="hero-overlay">
             <h1>Find the Perfect Tattoo</h1>
             <p>Discover a curated collection of tattoos from artists worldwide!</p>
+            <button class="btn-explore">Explore Gallery</button>
         </div>
     </header>
 
@@ -28,11 +35,11 @@
     <section class="categories">
         <h2>Categories</h2>
         <div id="categoryList">
-            <button onclick="loadImages('Japanese')">Japanese</button>
-            <button onclick="loadImages('Minimal')">Minimal</button>
-            <button onclick="loadImages('Retro')">Retro</button>
-            <button onclick="loadImages('Floral')">Floral</button>
-            <button onclick="loadImages('Animals')">Animals</button>
+            <button class="btn-category" onclick="loadImages('Japanese')">Japanese</button>
+            <button class="btn-category" onclick="loadImages('Minimal')">Minimal</button>
+            <button class="btn-category" onclick="loadImages('Retro')">Retro</button>
+            <button class="btn-category" onclick="loadImages('Floral')">Floral</button>
+            <button class="btn-category" onclick="loadImages('Animals')">Animals</button>
         </div>
     </section>
 
