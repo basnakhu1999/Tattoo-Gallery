@@ -22,7 +22,7 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
                 return [];
             }
         }
-        document.getElementById("searchBox").addEventListener("keyup", searchTattoos);
+        document.getElementById("searchBox").addEventListener("", searchTattoos);
 
         // ฟังก์ชันแสดงรูปภาพ
         async function loadImages(category) {
@@ -48,8 +48,13 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             const gallery = document.getElementById("imageGallery");
             gallery.innerHTML = ""; // เคลียร์รูปเดิม
         
+            if (searchTerm.trim() === "") {
+                alert("Please enter a search term."); // แจ้งเตือนหากช่องค้นหาว่าง
+                return;
+            }
+        
             // ดึงรูปภาพทั้งหมดจาก S3
-            const images = await getImagesFromS3(""); // ไม่ระบุโฟลเดอร์ (ดึงทั้งหมด)
+            const images = await getAllImagesFromS3();
         
             // กรองรูปภาพที่ตรงกับคำค้นหา
             const filteredImages = images.filter(imgUrl => {
@@ -58,16 +63,43 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             });
         
             // แสดงผลการค้นหา
-            filteredImages.forEach(imgUrl => {
-                const imgElement = document.createElement("img");
-                imgElement.src = imgUrl;
-                imgElement.alt = "Tattoo";
-                imgElement.classList.add("lazy-load");
-                gallery.appendChild(imgElement);
-            });
+            if (filteredImages.length > 0) {
+                filteredImages.forEach(imgUrl => {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = imgUrl;
+                    imgElement.alt = "Tattoo";
+                    imgElement.classList.add("lazy-load");
+                    gallery.appendChild(imgElement);
+                });
+            } else {
+                gallery.innerHTML = "<p>No results found.</p>"; // แสดงข้อความหากไม่พบผลลัพธ์
+            }
         }
 
-
+        // ฟังก์ชันดึงรูปภาพทั้งหมดจาก S3 -สำหรับการค้นหา
+        async function getAllImagesFromS3() {
+            const S3_BUCKET = "tattoo-gallery11";
+            const REGION = "ap-southeast-2";
+            const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
+        
+            try {
+                // ดึงรายการไฟล์ทั้งหมดจาก S3
+                const response = await fetch(`${S3_URL}?list-type=2`);
+                const text = await response.text();
+        
+                // แปลง XML Response เป็นรายการไฟล์
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "text/xml");
+                const files = Array.from(xml.getElementsByTagName("Key"))
+                    .map(node => node.textContent)
+                    .filter(key => key.endsWith(".jpg") || key.endsWith(".png")); // กรองเฉพาะไฟล์รูปภาพ
+        
+                return files.map(file => `${S3_URL}${file}`);
+            } catch (error) {
+                console.error("Error fetching images:", error);
+                return [];
+            }
+        }
 
 
 
