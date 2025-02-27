@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tattoo Gallery</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <h1>TattooGallery</h1>
+        <input type="text" id="searchBox" placeholder="ค้นหาลายสัก...">
+        <button>เข้าสู่ระบบ</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-overlay">
+            <h1>ค้นหาลายสักที่ใช่สำหรับคุณ</h1>
+            <p>รวมลายสักจากทั่วโลก อัปเดตทุกวัน!</p>
+        </div>
+    </header>
+
+    <!-- หมวดหมู่ -->
+    <section class="categories">
+        <h2>หมวดหมู่ลายสัก</h2>
+        <div id="categoryList">
+            <button onclick="filterCategory('ญี่ปุ่น')">ญี่ปุ่น</button>
+            <button onclick="filterCategory('มินิมอล')">มินิมอล</button>
+            <button onclick="filterCategory('เรโทร')">เรโทร</button>
+            <button onclick="filterCategory('ดอกไม้')">ดอกไม้</button>
+            <button onclick="filterCategory('สัตว์')">สัตว์</button>
+        </div>
+    </section>
+
+    <!-- แกลเลอรี -->
+    <section class="gallery">
+        <h2>ลายสักแนะนำ</h2>
+        <div id="imageGallery"></div>
+    </section>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
