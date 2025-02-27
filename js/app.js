@@ -308,3 +308,22 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
         function showPaymentDetails() {
             alert("Payment details will be shown here."); // แสดงรายละเอียดการชำระเงิน (ตัวอย่าง)
         }
+
+
+        // ฟังก์ชันสำหรับแสดง Toast
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById("toast");
+            const toastMessage = document.getElementById("toast-message");
+        
+            // ตั้งค่าข้อความและสีพื้นหลัง
+            toastMessage.textContent = message;
+            toast.style.backgroundColor = isSuccess ? "#4CAF50" : "#f44336"; // สีเขียวหรือแดง
+        
+            // แสดง Toast
+            toast.classList.add("show");
+        
+            // ซ่อน Toast หลังจาก 3 วินาที
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }

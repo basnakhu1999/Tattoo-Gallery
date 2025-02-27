@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tattoo Gallery</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -17,9 +20,83 @@
             <input type="text" id="searchBox" placeholder="Search for tattoos..." onkeyup="searchTattoos()">
         </div>
         <div class="navbar-actions">
-            <button class="btn-signin">Sign In</button>
+            <button class="btn-signin" onclick="openSignUpPopup()">Sign Up</button>
         </div>
     </nav>
+
+
+    <div id="toast" class="toast">
+        <div id="toast-message"></div>
+    </div>
+
+
+    <!-- Popup Sign Up -->
+    <div id="signup-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeSignUpPopup()">X</span>
+            <h2>Sign Up</h2>
+            <input type="email" id="signup-email" placeholder="Email">
+            <input type="password" id="signup-password" placeholder="Password">
+            <button onclick="signUp()">Sign Up</button>
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyAmNOoR0LKBpqhLS51l2yb4fHZ38o_1hMo",
+        authDomain: "tattoogo11.firebaseapp.com",
+        projectId: "tattoogo11",
+        storageBucket: "tattoogo11.firebasestorage.app",
+        messagingSenderId: "265870986372",
+        appId: "1:265870986372:web:654e31fbe226359aec86d1",
+        measurementId: "G-XK9Z3Y21JG"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // ฟังก์ชันเปิด Popup Sign Up
+        function openSignUpPopup() {
+            document.getElementById("signup-popup").style.display = "flex";
+        }
+
+        // ฟังก์ชันปิด Popup Sign Up
+        function closeSignUpPopup() {
+            document.getElementById("signup-popup").style.display = "none";
+        }
+
+        // ฟังก์ชันสมัครสมาชิก
+        async function signUp() {
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
+
+        try {
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            showToast("Sign up successful!", true); // แสดง Toast สำเร็จ
+            console.log("User registered:", user);
+        } catch (error) {
+            showToast("Error: " + error.message, false); // แสดง Toast ข้อผิดพลาด
+            console.error("Error signing up:", error.message);
+        }
+    }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Hero Section -->
     <header class="hero">

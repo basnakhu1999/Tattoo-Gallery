@@ -423,3 +423,101 @@ body {
 .payment-btn:hover {
     background: #444;
 }
+
+
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+        .popup-content .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #000;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        
+        .popup-content .close:hover {
+            color: #ff6600;
+        }
+        .popup-content h2 {
+            margin-bottom: 20px;
+        }
+        .popup-content input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .popup-content button {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .popup-content button:hover {
+            background: #444;
+        }
+        #status-message {
+            margin-top: 10px;
+            color: #ff6600;
+        }
+
+        /* Toast Styles */ 
+        .toast {
+            display: none; /* ซ่อนไว้ก่อน */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50; /* สีเขียว */
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* ให้แสดงอยู่ด้านบนสุด */
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        .toast.show {
+            display: block; /* แสดง Toast */
+        }
