@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #signup-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        #signup-form h2 {
+            margin-bottom: 20px;
+        }
+        #signup-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        #signup-form button {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        #signup-form button:hover {
+            background: #444;
+        }
+        #status-message {
+            margin-top: 10px;
+            color: #ff6600;
+        }
+    </style>
+</head>
+<body>
+    <div id="signup-form">
+        <h2>Sign Up</h2>
+        <input type="email" id="signup-email" placeholder="Email">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button onclick="signUp()">Sign Up</button>
+        <div id="status-message"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-auth-compat.js"></script>
+    
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyAmNOoR0LKBpqhLS51l2yb4fHZ38o_1hMo",
+        authDomain: "tattoogo11.firebaseapp.com",
+        projectId: "tattoogo11",
+        storageBucket: "tattoogo11.firebasestorage.app",
+        messagingSenderId: "265870986372",
+        appId: "1:265870986372:web:654e31fbe226359aec86d1",
+        measurementId: "G-XK9Z3Y21JG"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // ฟังก์ชันสมัครสมาชิก
+        async function signUp() {
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                document.getElementById("status-message").textContent = "Sign up successful!";
+                console.log("User registered:", user);
+            } catch (error) {
+                document.getElementById("status-message").textContent = "Error: " + error.message;
+                console.error("Error signing up:", error.message);
+            }
+        }
+    </script>
+</body>
+</html>

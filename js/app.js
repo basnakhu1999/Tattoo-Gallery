@@ -22,7 +22,7 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
                 return [];
             }
         }
-        document.getElementById("searchBox").addEventListener("", searchTattoos);
+        
 
         // ฟังก์ชันแสดงรูปภาพ
         async function loadImages(category) {
@@ -150,7 +150,7 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
 
         ////100รูปต่อหน้าเว็บ
         let currentPage = 1; // หน้าปัจจุบัน
-        const itemsPerPage = 100; // จำนวนรูปภาพต่อหน้า
+        const itemsPerPage = 50; // จำนวนรูปภาพต่อหน้า
 
         ////แสดงรูปภาพและปุ่ม Pagination
         async function loadImages(category, page = 1) {
@@ -183,7 +183,7 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             // ปุ่ม "ก่อนหน้า"
             if (currentPage > 1) {
                 const prevButton = document.createElement("button");
-                prevButton.innerText = "ก่อนหน้า";
+                prevButton.innerText = "Previous";
                 prevButton.addEventListener("click", () => loadImages(category, currentPage - 1));
                 paginationContainer.appendChild(prevButton);
             }
@@ -200,7 +200,7 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             // ปุ่ม "ถัดไป"
             if (currentPage < totalPages) {
                 const nextButton = document.createElement("button");
-                nextButton.innerText = "ถัดไป";
+                nextButton.innerText = "Next";
                 nextButton.addEventListener("click", () => loadImages(category, currentPage + 1));
                 paginationContainer.appendChild(nextButton);
             }

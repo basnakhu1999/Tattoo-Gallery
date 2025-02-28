@@ -16,9 +16,7 @@
         <div class="navbar-brand">
             <h1>TattooGallery</h1>
         </div>
-        <div class="navbar-search">
-            <input type="text" id="searchBox" placeholder="Search for tattoos..." onkeyup="searchTattoos()">
-        </div>
+
         <div class="navbar-actions">
             <button class="btn-signin" onclick="openSignUpPopup()">Sign Up</button>
         </div>
@@ -87,25 +85,28 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     <!-- Hero Section -->
     <header class="hero">
         <div class="hero-overlay">
             <h1>Discover AI-Generated Tattoos</h1>
             <p>Explore a Curated Collection of AI-Generated Tattoos from Around the World!</p>
-            <button class="btn-explore">Explore Gallery</button>
+
+              
+            <!-- Search Container -->
+               <div class="search-box">
+                <select>
+                    <option>All</option>
+                    <option>Tattoos</option>
+                    <option>Artists</option>
+                </select>
+                <input type="text" placeholder="Search for tattoos...">
+                <button>🔍</button>
+            </div>
+            <br>
         </div>
     </header>
+
+ 
 
     <!-- Categories -->
 
