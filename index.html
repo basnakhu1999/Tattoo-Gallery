@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tattoo Gallery</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/box.css">
+    <link rel="stylesheet" href="css/menu.css">
     <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-auth-compat.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
@@ -17,9 +20,33 @@
             <h1>TattooGallery</h1>
         </div>
 
-        <div class="navbar-actions">
-            <button class="btn-signin" onclick="openSignUpPopup()">Sign Up</button>
+
+        <!-- Menu for Desktop -->
+        <ul class="main-menu">
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-search"></i> Discover Photos</a></li>
+            <li class="main-dropdown">
+                <a href="#"><i class="fas fa-compass"></i> Explore <i class="fas fa-chevron-down"></i></a>
+                <ul class="main-dropdown-menu">
+                    <li><a href="#"><i class="fas fa-tags"></i> Pricing</a></li>
+                    <li><a href="#"><i class="fas fa-blog"></i> Tattoo Blog</a></li>
+                    <li><a href="#"><i class="fas fa-flag"></i> Report Content</a></li>
+                    <li><a href="#"><i class="fas fa-handshake"></i> Partnerships</a></li>
+                    <li><a href="#"><i class="fas fa-info-circle"></i> About Us</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Hamburger Menu for Mobile -->
+        <div class="main-navbar-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
         </div>
+    </nav>
+
+
+
     </nav>
 
 
@@ -121,15 +148,19 @@
         </div>
     </section>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox">
-        <span class="close" onclick="closeLightbox()">&times;</span>
-        <img id="lightbox-img" class="lightbox-content">
-        <div class="lightbox-footer">
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+    <span class="close" onclick="closeLightbox()">&times;</span>
+    <div class="lightbox-container">
+        <img id="lightbox-img" class="lightbox-image">
+        <div class="lightbox-details">
+            <h3>Image Details</h3>
+            <p>This is a sample description for the image.</p>
             <button onclick="downloadImage()" class="download-btn">Download</button>
             <button onclick="showPaymentDetails()" class="payment-btn">Payment Details</button>
         </div>
     </div>
+</div>
 
 
     <!-- Gallery -->
@@ -177,6 +208,11 @@
         <div class="footer-bottom">
             <p>&copy; 2023 Tattoo Gallery. All rights reserved.</p>
         </div>
+
+        <div class="navbar-actions">
+            <button class="btn-signin" onclick="openSignUpPopup()">Sign Up</button>
+        </div>
+
     </footer>
     
 </body>

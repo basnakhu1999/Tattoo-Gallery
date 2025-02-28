@@ -222,15 +222,24 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             const lightboxImg = document.getElementById("lightbox-img");
             lightbox.style.display = "block";
             lightboxImg.src = imgSrc;
-        
-            // แสดง Lightbox Footer
-            const lightboxFooter = lightbox.querySelector(".lightbox-footer");
-            lightboxFooter.style.display = "block";
         }
         
         function closeLightbox() {
-            document.getElementById("lightbox").style.display = "none";
+            document.getElementById('lightbox').style.display = 'none';
         }
+        
+        function downloadImage() {
+            alert("Downloading image...");
+        }
+        
+        function showPaymentDetails() {
+            alert("Showing payment details...");
+        }
+
+            
+
+
+
         //ดาวน์โหลดรูปภาพ
         async function downloadImage() {
             const lightboxImg = document.getElementById("lightbox-img");
@@ -327,3 +336,16 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
                 toast.classList.remove("show");
             }, 3000);
         }
+
+
+            // script.js
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mainMenu = document.querySelector('.main-menu');
+
+            mobileMenu.addEventListener('click', () => {
+                mainMenu.classList.toggle('active');
+            });
+
+
+
+            
