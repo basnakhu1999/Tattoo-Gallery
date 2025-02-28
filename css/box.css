@@ -95,6 +95,7 @@
 
 .close {
     position: absolute; /* ปรับให้ปุ่ม close อยู่ภายในกรอบ */
+    z-index: 20;
     top: 15px;
     right: 15px;
     color: #333;
