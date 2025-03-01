@@ -216,25 +216,38 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
                 });
             });
         }
-        //เปิด Lightbox
-        function openLightbox(imgSrc) {
-            const lightbox = document.getElementById("lightbox");
-            const lightboxImg = document.getElementById("lightbox-img");
-            lightbox.style.display = "block";
-            lightboxImg.src = imgSrc;
+
+
+        // ฟังก์ชันเปิด Lightbox
+    function openLightbox(imgSrc) {
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    lightbox.style.display = "flex"; // ใช้ flex เพื่อจัดให้อยู่ตรงกลาง
+    lightboxImg.src = imgSrc;
+}
+
+    // ฟังก์ชันปิด Lightbox
+    function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+    }
+
+    // ปิด Lightbox เมื่อคลิกนอกกรอบ
+    document.addEventListener('click', (event) => {
+        const lightbox = document.getElementById('lightbox');
+        if (event.target === lightbox) {
+            closeLightbox();
         }
-        
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
+    });
+
+    // ปิด Lightbox เมื่อกดปุ่ม ESC
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeLightbox();
         }
-        
-        function downloadImage() {
-            alert("Downloading image...");
-        }
-        
-        function showPaymentDetails() {
-            alert("Showing payment details...");
-        }
+    });
+
+
+
 
             
 
@@ -243,39 +256,76 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
         //ดาวน์โหลดรูปภาพ
         async function downloadImage() {
             const lightboxImg = document.getElementById("lightbox-img");
-            const imgSrc = lightboxImg.src; // URL ของรูปภาพที่กำลังดู
+            const imgSrc = lightboxImg.src; // ดึง URL ของรูปภาพจาก src ของ <img>
+        
+            if (!imgSrc || !imgSrc.startsWith('http')) {
+                alert("Invalid image URL. Cannot download.");
+                return;
+            }
         
             try {
-                // ดึงข้อมูลรูปภาพจาก URL
-                const response = await fetch(imgSrc);
-                const blob = await response.blob(); // แปลงข้อมูลเป็น Blob
+                // ดึงข้อมูลรูปภาพจาก URL (รองรับการ redirect และ cross-origin)
+                const response = await fetch(imgSrc, {
+                    method: 'GET',
+                    mode: 'cors', // รองรับ CORS
+                    credentials: 'omit', // ป้องกันส่ง cookies ถ้าไม่ได้ต้องการใช้
+                    headers: {
+                        'Accept': 'image/*' // ระบุว่าเราต้องการไฟล์รูป
+                    }
+                });
         
-                // สร้างลิงก์สำหรับดาวน์โหลด
+                if (!response.ok) {
+                    throw new Error("Failed to fetch image.");
+                }
+        
+                const blob = await response.blob(); // แปลงข้อมูลเป็น Blob
+                const contentType = response.headers.get('content-type');
+        
+                // ดึงชื่อไฟล์จาก Content-Disposition หรือใช้จาก URL
+                let filename = "image.png";
+                const contentDisposition = response.headers.get('content-disposition');
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename="?(.+?)"?$/);
+                    if (match) {
+                        filename = match[1];
+                    }
+                } else {
+                    filename = imgSrc.split("/").pop().split("?")[0] || "image.png";
+                }
+        
+                // สร้างลิงก์ดาวน์โหลด
                 const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob); // สร้าง Blob URL
-                link.download = imgSrc.split("/").pop(); // ดึงชื่อไฟล์จาก URL
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
         
-                // ลบ Blob URL เพื่อเคลียร์หน่วยความจำ
+                // ล้างหน่วยความจำ
                 URL.revokeObjectURL(link.href);
+        
+                alert("Image downloaded successfully!");
             } catch (error) {
                 console.error("Error downloading image:", error);
                 alert("Failed to download image. Please try again.");
             }
         }
         
-        function showPaymentDetails() {
-            alert("Payment details will be shown here."); // แสดงรายละเอียดการชำระเงิน (ตัวอย่าง)
-        }
+        
+
+
+                // ดาวน์โหลดรูปภาพและจ่ายเงิน
+          
+                
+                function showPaymentDetails() {
+                    alert("Payment details will be shown here."); // แสดงรายละเอียดการชำระเงิน (ตัวอย่าง)
+                }
+        
 
         
         
         
-        function closeLightbox() {
-            document.getElementById("lightbox").style.display = "none";
-        }
+     
         
         // เรียกใช้ initLightbox หลังจากโหลดรูปภาพเสร็จ
         async function loadImages(category, page = 1) {
@@ -300,23 +350,6 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
             renderPagination(images.length, page, category);
         }
 
-        // ดาวน์โหลดรูปภาพและจ่ายเงิน
-        function downloadImage() {
-            const lightboxImg = document.getElementById("lightbox-img");
-            const imgSrc = lightboxImg.src;
-        
-            // สร้างลิงก์สำหรับดาวน์โหลด
-            const link = document.createElement("a");
-            link.href = imgSrc;
-            link.download = "tattoo-design.jpg"; // ตั้งชื่อไฟล์ที่ดาวน์โหลด
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        
-        function showPaymentDetails() {
-            alert("Payment details will be shown here."); // แสดงรายละเอียดการชำระเงิน (ตัวอย่าง)
-        }
 
 
         // ฟังก์ชันสำหรับแสดง Toast
