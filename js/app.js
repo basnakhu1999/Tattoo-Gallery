@@ -248,7 +248,54 @@ const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/`;
 
 
 
+            // ฟังก์ชันดึงชื่อไฟล์จาก URL
+            async function getTitleFromImageURL() {
+                const lightboxImg = document.getElementById("lightbox-img");
+                if (!lightboxImg || !lightboxImg.src) {
+                    console.error("Image element or src not found.");
+                    return null;
+                }
+            
+                const url = lightboxImg.src; // ดึง URL จาก src ของ <img>
+            
+                try {
+                    // ดึง HTML ของหน้าเว็บจาก URL
+                    const response = await fetch(url);
+                    const htmlText = await response.text();
+            
+                    // ใช้ DOMParser เพื่อแยก <title> จาก HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, "text/html");
+                    const title = doc.querySelector("title").textContent;
+            
+                    // ตัดส่วนที่ไม่จำเป็นออก (เช่น ขนาดรูปภาพ)
+                    const cleanTitle = title.replace(/\(.*\)$/, "").trim(); // ตัดส่วน (1024×1024) ออก
+                    return cleanTitle;
+                } catch (error) {
+                    console.error("Error fetching title:", error);
+                    return null;
+                }
+            }
 
+        // ฟังก์ชันอัปเดต Title ของรูปภาพ
+        async function updateImageTitle() {
+            const imageTitle = document.getElementById("image-title");
+        
+            // ดึง title จาก URL ของรูปภาพ
+            const title = await getTitleFromImageURL();
+            imageTitle.textContent = title || "Image Details"; // หากไม่มี title ให้ใช้ค่า default
+        }
+
+        // เรียกใช้ฟังก์ชันอัปเดต Title เมื่อเปิด Lightbox
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            lightbox.style.display = "flex"; // ใช้ flex เพื่อจัดให้อยู่ตรงกลาง
+            lightboxImg.src = imgSrc;
+        
+            // อัปเดต Title ของรูปภาพ
+            updateImageTitle();
+        }
             
 
 
