@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tattoo Gallery</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/box.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-auth-compat.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="https://tattoogo.vercel.app/" style="text-decoration: none; color: inherit;">
+                <h1>TattooGallery</h1>
+            </a>
+        </div>
+        </div>
+
+
+        <!-- Menu for Desktop -->
+        <ul class="main-menu">
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-search"></i> Discover Photos</a></li>
+            <li class="main-dropdown">
+                <a href="#"><i class="fas fa-compass"></i> Explore <i class="fas fa-chevron-down"></i></a>
+                <ul class="main-dropdown-menu">
+                    <li><a href="#"><i class="fas fa-tags"></i> Pricing</a></li>
+                    <li><a href="#"><i class="fas fa-blog"></i> Tattoo Blog</a></li>
+                    <li><a href="#"><i class="fas fa-flag"></i> Report Content</a></li>
+                    <li><a href="#"><i class="fas fa-handshake"></i> Partnerships</a></li>
+                    <li><a href="#"><i class="fas fa-info-circle"></i> About Us</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Hamburger Menu for Mobile -->
+        <div class="main-navbar-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+
+
+
+    </nav>
+
+
+    <div id="toast" class="toast">
+        <div id="toast-message"></div>
+    </div>
+
+
+    <!-- Popup Sign Up -->
+    <div id="signup-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeSignUpPopup()">X</span>
+            <h2>Sign Up</h2>
+            <input type="email" id="signup-email" placeholder="Email">
+            <input type="password" id="signup-password" placeholder="Password">
+            <button onclick="signUp()">Sign Up</button>
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyAmNOoR0LKBpqhLS51l2yb4fHZ38o_1hMo",
+        authDomain: "tattoogo11.firebaseapp.com",
+        projectId: "tattoogo11",
+        storageBucket: "tattoogo11.firebasestorage.app",
+        messagingSenderId: "265870986372",
+        appId: "1:265870986372:web:654e31fbe226359aec86d1",
+        measurementId: "G-XK9Z3Y21JG"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // ฟังก์ชันเปิด Popup Sign Up
+        function openSignUpPopup() {
+            document.getElementById("signup-popup").style.display = "flex";
+        }
+
+        // ฟังก์ชันปิด Popup Sign Up
+        function closeSignUpPopup() {
+            document.getElementById("signup-popup").style.display = "none";
+        }
+
+        // ฟังก์ชันสมัครสมาชิก
+        async function signUp() {
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
+
+        try {
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            showToast("Sign up successful!", true); // แสดง Toast สำเร็จ
+            console.log("User registered:", user);
+        } catch (error) {
+            showToast("Error: " + error.message, false); // แสดง Toast ข้อผิดพลาด
+            console.error("Error signing up:", error.message);
+        }
+    }
+    </script>
+
+
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-overlay">
+            <h1>Discover AI-Generated Tattoos</h1>
+            <p>Explore a Curated Collection of AI-Generated Tattoos from Around the World!</p>
+
+              
+            <!-- Search Container -->
+               <div class="search-box">
+                <select>
+                    <option>All</option>
+                    <option>Tattoos</option>
+                    <option>Artists</option>
+                </select>
+                <input type="text" placeholder="Search for tattoos...">
+                <button>🔍</button>
+            </div>
+            <br>
+        </div>
+    </header>
+
+ 
+
+    <!-- Categories -->
+
+    <section class="categories">
+        <h2>Categories</h2>
+        <div id="categoryList">
+            <button class="btn-category" onclick="loadImages('Japanese')">Japanese</button>
+            <button class="btn-category" onclick="loadImages('Minimal')">Minimal</button>
+            <button class="btn-category" onclick="loadImages('Retro')">Retro</button>
+            <button class="btn-category" onclick="loadImages('Floral')">Floral</button>
+            <button class="btn-category" onclick="loadImages('Animals')">Animals</button>
+        </div>
+    </section>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+    <div class="lightbox-container">
+        <button class="close" onclick="closeLightbox()">&times;</button>
+        <img id="lightbox-img" class="lightbox-image">
+        <div class="lightbox-details">
+            <h3 id="image-title">Image Details</h3>
+            <p>This is a sample description for the image.</p>
+            <button onclick="downloadImage()" class="download-btn">Download</button>
+            <button onclick="showPaymentDetails()" class="payment-btn">Payment Details</button>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Gallery -->
+    <section class="gallery">
+        <h2>Featured Tattoos</h2>
+        <div id="imageGallery"></div>
+    </section>
+
+
+    <script src="js/app.js"></script>
+    <div id="pagination"></div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Tattoo Gallery</h2>
+                <p>Your destination for unique and meaningful tattoo designs.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p>Email: info@tattoogallery.com</p>
+                <p>Phone: +66 123 456 789</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Tattoo Gallery. All rights reserved.</p>
+        </div>
+
+        <div class="navbar-actions">
+            <button class="btn-signin" onclick="openSignUpPopup()">Sign Up</button>
+        </div>
+
+    </footer>
+    
+</body>
+</html>
