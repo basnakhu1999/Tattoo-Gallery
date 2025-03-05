@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tattoo Gallery</title>
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/box.css">
     <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/price.css">
+
     <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-auth-compat.js"></script>
@@ -176,61 +179,64 @@
     <script src="js/app.js"></script>
     <div id="pagination"></div>
 
-
-
-
-
-
-    <section class="pricing-table">
-        <!-- Plan 1 -->
-        <div class="price-card">
-            <h2>Basic Plan</h2>
-            <div class="image-container">
-                <img src="https://via.placeholder.com/250x150" alt="Basic Plan">
+<br>
+    <!-- Price-->
+    <body class="price-page">
+        <header>
+            <h2>Compare Plans</h2>
+            <p>Choose the best plan for your needs</p>
+        </header>
+    
+        <section class="pricing-table">
+            <!-- Plan 1 -->
+            <div class="price-card">
+                <h2>Basic Plan</h2>
+                <div class="image-container">
+                    <img src="https://via.placeholder.com/250x150" alt="Basic Plan">
+                </div>
+                <p class="price">$15<span>/month</span></p>
+                <ul>
+                    <li>✅ Feature 1</li>
+                    <li>✅ Feature 2</li>
+                    <li>❌ Feature 3</li>
+                    <li>❌ Feature 4</li>
+                </ul>
+                <button>Choose Plan</button>
             </div>
-            <p class="price">$15<span>/month</span></p>
-            <ul>
-                <li>✅ Feature 1</li>
-                <li>✅ Feature 2</li>
-                <li>❌ Feature 3</li>
-                <li>❌ Feature 4</li>
-            </ul>
-            <button>Choose Plan</button>
-        </div>
-
-        <!-- Plan 2 -->
-        <div class="price-card highlight">
-            <h2>Standard Plan</h2>
-            <div class="image-container">
-                <img src="https://via.placeholder.com/250x150" alt="Standard Plan">
+    
+            <!-- Plan 2 -->
+            <div class="price-card highlight">
+                <h2>Standard Plan</h2>
+                <div class="image-container">
+                    <img src="https://via.placeholder.com/250x150" alt="Standard Plan">
+                </div>
+                <p class="price">$30<span>/month</span></p>
+                <ul>
+                    <li>✅ Feature 1</li>
+                    <li>✅ Feature 2</li>
+                    <li>✅ Feature 3</li>
+                    <li>❌ Feature 4</li>
+                </ul>
+                <button>Choose Plan</button>
             </div>
-            <p class="price">$30<span>/month</span></p>
-            <ul>
-                <li>✅ Feature 1</li>
-                <li>✅ Feature 2</li>
-                <li>✅ Feature 3</li>
-                <li>❌ Feature 4</li>
-            </ul>
-            <button>Choose Plan</button>
-        </div>
-
-        <!-- Plan 3 -->
-        <div class="price-card">
-            <h2>Premium Plan</h2>
-            <div class="image-container">
-                <img src="https://via.placeholder.com/250x150" alt="Premium Plan">
+    
+            <!-- Plan 3 -->
+            <div class="price-card">
+                <h2>Premium Plan</h2>
+                <div class="image-container">
+                    <img src="https://via.placeholder.com/250x150" alt="Premium Plan">
+                </div>
+                <p class="price">$50<span>/month</span></p>
+                <ul>
+                    <li>✅ Feature 1</li>
+                    <li>✅ Feature 2</li>
+                    <li>✅ Feature 3</li>
+                    <li>✅ Feature 4</li>
+                </ul>
+                <button>Choose Plan</button>
             </div>
-            <p class="price">$50<span>/month</span></p>
-            <ul>
-                <li>✅ Feature 1</li>
-                <li>✅ Feature 2</li>
-                <li>✅ Feature 3</li>
-                <li>✅ Feature 4</li>
-            </ul>
-            <button>Choose Plan</button>
-        </div>
-    </section>
-
+        </section>
+    
 
 
 
