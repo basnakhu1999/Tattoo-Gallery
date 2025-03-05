@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Details</title>
+    <style>
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container" id="image-container">
+        <h1 id="image-title">Image Details</h1>
+        <img id="image" src="" alt="">
+        <p id="image-description"></p>
+    </div>
+
+    <script>
+        function loadImageDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const imageUrl = urlParams.get('url'); // ดึง URL ของรูปภาพจาก query parameters
+
+            if (imageUrl) {
+                document.getElementById('image').src = imageUrl;
+                document.getElementById('image').alt = 'Image';
+                document.getElementById('image-title').textContent = 'Image Details';
+                document.title = 'Image Details - Tattoo Gallery';
+
+                // ดึงชื่อไฟล์จาก URL และแสดงเป็น title
+                const fileName = imageUrl.split("/").pop();
+                const cleanTitle = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "); // ตัดนามสกุลและขีดกลางออก
+                document.getElementById('image-title').textContent = cleanTitle;
+                document.title = `${cleanTitle} - Tattoo Gallery`;
+            } else {
+                document.getElementById('image-title').textContent = "Image not found.";
+            }
+        }
+
+        loadImageDetails();
+    </script>
+</body>
+</html>
