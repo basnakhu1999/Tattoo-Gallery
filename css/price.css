@@ -5,117 +5,131 @@
     box-sizing: border-box;
 }
 
-body {
+/* ตัวแปร CSS สำหรับหน้า price-page */
+.price-page {
+    --price-bg-color: #1e1e2f;
+    --price-text-color: #ffffff;
+    --price-secondary-text-color: #a0a0a0;
+    --price-card-bg: #2a2a40;
+    --price-card-border: #444;
+    --price-primary-color: #ff6b6b;
+    --price-hover-color: #ff4757;
+    --price-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --price-border-radius: 10px;
+    --price-transition: transform 0.3s ease;
+}
+
+.price-page body {
     font-family: 'Arial', sans-serif;
-    background-color: #f5f4f4;
-    color: #ffffff;
+    background-color: var(--price-bg-color);
+    color: var(--price-text-color);
     line-height: 1.6;
     padding: 20px;
 }
 
-header {
+.price-page header {
     text-align: center;
     margin-bottom: 40px;
 }
 
-header h1 {
+.price-page header h1 {
     font-size: 2.5rem;
-    color: #000000;
+    color: var(--price-text-color);
 }
 
-header p {
+.price-page header p {
     font-size: 1.2rem;
-    color: #a0a0a0;
+    color: var(--price-secondary-text-color);
 }
 
-.pricing-table {
+.price-page .pricing-table {
     display: flex;
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
 }
 
-.price-card {
-    background: #2a2a40;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+.price-page .price-card {
+    background: var(--price-card-bg);
+    border-radius: var(--price-border-radius);
+    box-shadow: var(--price-shadow);
     padding: 20px;
     width: 300px;
     text-align: center;
-    transition: transform 0.3s ease;
+    transition: var(--price-transition);
 }
 
-.price-card:hover {
+.price-page .price-card:hover {
     transform: translateY(-10px);
 }
 
-.price-card h2 {
+.price-page .price-card h2 {
     font-size: 1.8rem;
-    color: #ffffff;
+    color: var(--price-text-color);
     margin-bottom: 10px;
 }
 
-.image-container {
+.price-page .image-container {
     margin-bottom: 20px;
 }
 
-.image-container img {
+.price-page .image-container img {
     width: 100%;
     height: auto;
-    border-radius: 10px;
-    border: 2px solid #444;
+    border-radius: var(--price-border-radius);
+    border: 2px solid var(--price-card-border);
 }
 
-.price-card .price {
+.price-page .price-card .price {
     font-size: 2.5rem;
-    color: #ff6b6b;
+    color: var(--price-primary-color);
     margin-bottom: 20px;
 }
 
-.price-card .price span {
+.price-page .price-card .price span {
     font-size: 1rem;
-    color: #a0a0a0;
+    color: var(--price-secondary-text-color);
 }
 
-.price-card ul {
+.price-page .price-card ul {
     list-style: none;
     margin-bottom: 20px;
 }
 
-.price-card ul li {
+.price-page .price-card ul li {
     padding: 10px 0;
-    border-bottom: 1px solid #444;
-    color: #ffffff;
+    border-bottom: 1px solid var(--price-card-border);
+    color: var(--price-text-color);
 }
 
-.price-card ul li:last-child {
+.price-page .price-card ul li:last-child {
     border-bottom: none;
 }
 
-.price-card button {
-    background: #ff6b6b;
-    color: #ffffff;
+.price-page .price-card button {
+    background: var(--price-primary-color);
+    color: var(--price-text-color);
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: var(--price-border-radius);
     cursor: pointer;
     font-size: 1rem;
     transition: background 0.3s ease;
 }
 
-.price-card button:hover {
-    background: #ff4757;
+.price-page .price-card button:hover {
+    background: var(--price-hover-color);
 }
 
-.highlight {
-    border: 2px solid #ff6b6b;
+.price-page .highlight {
+    border: 2px solid var(--price-primary-color);
     transform: scale(1.05);
 }
 
-.highlight button {
-    background: #ff6b6b;
+.price-page .highlight button {
+    background: var(--price-primary-color);
 }
 
-.highlight button:hover {
-    background: #ff4757;
+.price-page .highlight button:hover {
+    background: var(--price-hover-color);
 }
